@@ -8,6 +8,24 @@ library CustomRevert {
     /// @dev ERC-7751 error for wrapping bubbled up reverts
     error WrappedError(address target, bytes4 selector, bytes reason, bytes details);
 
+    /// @notice Reverts with a custom error with an int24 argument
+    function revertWith(bytes4 selector, int24 value) internal pure {
+        assembly ("memory-safe") {
+            mstore(0x00, selector)
+            mstore(0x04, value)
+            revert(0x00, 0x24)
+        }
+    }
+
+    /// @notice Reverts with a custom error with a uint160 argument
+    function revertWith(bytes4 selector, uint160 value) internal pure {
+        assembly ("memory-safe") {
+            mstore(0x00, selector)
+            mstore(0x04, value)
+            revert(0x00, 0x24)
+        }
+    }
+
     /// @notice bubble up the revert message returned by a call and revert with a wrapped ERC-7751 error
     /// @dev this method can be vulnerable to revert data bombs
     function bubbleUpAndRevertWith(
